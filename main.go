@@ -20,26 +20,27 @@ var expireDate = 10 * time.Minute
 var cacheStories = make([]Story, 0)
 
 type Story struct {
-	By			string
-	Descendants	int
-	Id			int
-	Score		int
-	Time		int
-	Title		string
-	TitleCN		string
-	Type		string
-	Url			string
-	Index		int
+	By          string
+	Descendants int
+	Id          int
+	Score       int
+	Time        int
+	Title       string
+	TitleCN     string
+	Type        string
+	Url         string
+	Index       int
 }
 
 type IndexModel struct {
-	Items	[]Story
+	Items []Story
 }
 
 func main() {
 	//defer timeCost(time.Now())
 
 	r := mux.NewRouter()
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 	r.HandleFunc("/", getIndex).Methods("GET")
 	go delCache()
 	log.Fatal(http.ListenAndServe(":2000", r))
@@ -61,7 +62,7 @@ func getIndex(w http.ResponseWriter, r *http.Request) {
 		}
 
 		for i := 0; i < size; i++ {
-			story := <- ch
+			story := <-ch
 			stories[story.Index] = story
 		}
 

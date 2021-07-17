@@ -1,17 +1,59 @@
-<!DOCTYPE html>
-<html>
+<html lang="en" op="news">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-</head>
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="static/news.css">
+    <link rel="shortcut icon" href="static/favicon.ico">
+    <title>Hacker News Chinese</title></head>
 <body>
-<ul>
-    {{- range .Items}}
-        <li class="mb-2">
-{{/*            <span class="text-warm-gray-400 mr-2">{{.CreatedAt.Format "2006-01-02"}}</span>*/}}
-            <a href="{{.Url}}">{{.Title}} - {{.TitleCN}}</a>
-        </li>
-    {{- end}}
-</ul>
+<center>
+    <table id="hnmain" border="0" cellpadding="0" cellspacing="0" width="85%" bgcolor="#f6f6ef">
+        <tr>
+            <td bgcolor="#ff6600">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="padding:2px">
+                    <tr>
+                        <td style="width:18px;padding-right:4px"><a href="https://news.ycombinator.com"><img
+                                        src="static/y18.gif" width="18" height="18" style="border:1px white solid;"></a></td>
+                        <td style="line-height:12pt; height:10px;"><span class="pagetop"><b class="hnname"><a
+                                            href="news">Hacker News Chinese</a></b></span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr id="pagespace" title="" style="height:10px"></tr>
+        <tr>
+            <td>
+                <table border="0" cellpadding="0" cellspacing="0" class="itemlist">
+                    {{- range .Items}}
+                        <tr class='athing' id='{{.Id}}'>
+                            <td align="right" valign="top" class="title"><span class="rank">{{.Index}}.</span></td>
+                            <td class="title"><a href="{{.Url}}" class="storylink">{{.TitleCN}}</a>
+{{/*                                <span class="sitebit comhead">*/}}
+{{/*                                    (<a href="from?site=philpapers.org"><span class="sitestr">philpapers.org</span></a>)*/}}
+{{/*                                </span>*/}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1"></td>
+                            <td class="subtext"><span>{{.Title}}</span></td>
+                        </tr>
+                        <tr class="spacer" style="height:5px"></tr>
+                    {{- end}}
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td><img src="static/s.gif" height="10" width="0">
+                <table width="100%" cellspacing="0" cellpadding="1">
+                    <tr><td bgcolor="#ff6600"></td></tr>
+                </table>
+                <br>
+                <center>By Henry</center>
+                <br>
+            </td>
+        </tr>
+    </table>
+</center>
 </body>
 </html>
