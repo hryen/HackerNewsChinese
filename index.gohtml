@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+<ul>
+    {{- range .Items}}
+        <li class="mb-2">
+{{/*            <span class="text-warm-gray-400 mr-2">{{.CreatedAt.Format "2006-01-02"}}</span>*/}}
+            <a href="{{.Url}}">{{.Title}} - {{.TitleCN}}</a>
+        </li>
+    {{- end}}
+</ul>
+</body>
+</html>
