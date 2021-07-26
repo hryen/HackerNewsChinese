@@ -71,7 +71,9 @@ func getIndex(w http.ResponseWriter, r *http.Request) {
 		}
 
 		cacheStories = stories
-		cacheTimestamp = time.Now()
+
+		shanghai, _ := time.LoadLocation("Asia/Shanghai")
+		cacheTimestamp = time.Now().In(shanghai)
 	}
 
 	tmpl, err := template.ParseFiles("index.gohtml")
