@@ -15,9 +15,12 @@ import (
 	"time"
 )
 
-var size = 10
-var expireDate = 10 * time.Minute
+var size = 15
+
+// 建议缓存为3小时，20条 * 100个字符 * 一天8次 * 30天 = 4万，谷歌免费额度是50万
+var expireDate = 1 * time.Hour
 var cacheStories = make([]Story, 0)
+var cacheTimestamp time.Time
 
 type Story struct {
 	By          string
@@ -33,7 +36,8 @@ type Story struct {
 }
 
 type IndexModel struct {
-	Items []Story
+	Items          []Story
+	CacheTimestamp time.Time
 }
 
 func main() {
@@ -67,6 +71,7 @@ func getIndex(w http.ResponseWriter, r *http.Request) {
 		}
 
 		cacheStories = stories
+		cacheTimestamp = time.Now()
 	}
 
 	tmpl, err := template.ParseFiles("index.gohtml")
@@ -74,7 +79,7 @@ func getIndex(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
-	err = tmpl.Execute(w, IndexModel{Items: cacheStories})
+	err = tmpl.Execute(w, IndexModel{Items: cacheStories, CacheTimestamp: cacheTimestamp})
 	if err != nil {
 		log.Println(err)
 	}
