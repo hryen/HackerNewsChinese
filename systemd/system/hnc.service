@@ -3,6 +3,7 @@ Description=HackerNews Chinese
 After=network.target
 
 [Service]
+Environment="GOOGLE_APPLICATION_CREDENTIALS=/usr/local/hnc/service-account-file.json"
 WorkingDirectory=/usr/local/hnc
 ExecStart=/usr/local/hnc/HackerNewsChinese
 
