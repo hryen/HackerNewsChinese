@@ -53,7 +53,7 @@ func main() {
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/", http.FileServer(http.FS(staticFiles))))
 	r.HandleFunc("/", getIndex).Methods("GET")
 	go delCache()
-	log.Fatal(http.ListenAndServe(":2001", r))
+	log.Fatal(http.ListenAndServe("127.0.0.1:2001", r))
 }
 
 func getIndex(w http.ResponseWriter, _ *http.Request) {
