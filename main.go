@@ -3,6 +3,7 @@ package main
 import (
 	"cloud.google.com/go/translate"
 	"context"
+	"embed"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
@@ -15,10 +16,15 @@ import (
 	"time"
 )
 
-var size = 15
-
 // 建议缓存为3小时，20条 * 100个字符 * 一天8次 * 30天 = 4万，谷歌免费额度是50万
+var size = 20
 var expireDate = 1 * time.Hour
+
+//go:embed index.gohtml
+var index embed.FS
+
+//go:embed static
+var staticFiles embed.FS
 var cacheStories = make([]Story, 0)
 var cacheTimestamp time.Time
 
@@ -44,13 +50,13 @@ func main() {
 	//defer timeCost(time.Now())
 
 	r := mux.NewRouter()
-	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/", http.FileServer(http.FS(staticFiles))))
 	r.HandleFunc("/", getIndex).Methods("GET")
 	go delCache()
-	log.Fatal(http.ListenAndServe(":2000", r))
+	log.Fatal(http.ListenAndServe(":2001", r))
 }
 
-func getIndex(w http.ResponseWriter, r *http.Request) {
+func getIndex(w http.ResponseWriter, _ *http.Request) {
 
 	if len(cacheStories) == 0 {
 		var arr, err = getTopStories()
@@ -76,7 +82,7 @@ func getIndex(w http.ResponseWriter, r *http.Request) {
 		cacheTimestamp = time.Now().In(shanghai)
 	}
 
-	tmpl, err := template.ParseFiles("index.gohtml")
+	tmpl, err := template.ParseFS(index, "index.gohtml")
 	if err != nil {
 		log.Println(err)
 	}
@@ -162,10 +168,10 @@ func translateTextToChinese(text string) (string, error) {
 
 	resp, err := client.Translate(ctx, []string{text}, lang, nil)
 	if err != nil {
-		return "", fmt.Errorf("Translate: %v", err)
+		return "", fmt.Errorf("translate: %v", err)
 	}
 	if len(resp) == 0 {
-		return "", fmt.Errorf("Translate returned empty response to text: %s", text)
+		return "", fmt.Errorf("translate returned empty response to text: %s", text)
 	}
 	return resp[0].Text, nil
 }
