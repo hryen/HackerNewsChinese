@@ -1,0 +1,10 @@
+[Unit]
+Description=HackerNews Chinese
+After=network.target
+
+[Service]
+WorkingDirectory=/usr/local/hnc
+ExecStart=/usr/local/hnc/HackerNewsChinese
+
+[Install]
+WantedBy=multi-user.target
